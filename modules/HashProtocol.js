@@ -26,7 +26,7 @@ const pushHashPath = (path) =>
 
 const replaceHashPath = (path) =>
   window.location.replace(
-    window.location.pathname + window.location.search + '#' + path
+    '#' + path
   )
 
 const ensureSlash = () => {
