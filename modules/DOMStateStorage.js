@@ -20,6 +20,17 @@ export const saveState = (key, state) => {
       window.sessionStorage.setItem(createKey(key), JSON.stringify(state))
     }
   } catch (error) {
+    if (!window.sessionStorage) {
+      // Session storage is not available or hidden.
+      // sessionStorage is undefined in Internet Explorer when served via file protocol.
+      warning(
+        false,
+        '[history] Unable to save state; sessionStorage is not accessible'
+      )
+
+      return
+    }
+
     if (error.name === SecurityError) {
       // Blocking cookies in Chrome/Firefox/Safari throws SecurityError on any
       // attempt to access window.sessionStorage.
@@ -50,6 +61,18 @@ export const readState = (key) => {
   try {
     json = window.sessionStorage.getItem(createKey(key))
   } catch (error) {
+
+    if (!window.sessionStorage) {
+      // Session storage is not available or hidden.
+      // sessionStorage is undefined in Internet Explorer when served via file protocol.
+      warning(
+        false,
+        '[history] Unable to save state; sessionStorage is not accessible'
+      )
+
+      return undefined
+    }
+
     if (error.name === SecurityError) {
       // Blocking cookies in Chrome/Firefox/Safari throws SecurityError on any
       // attempt to access window.sessionStorage.
